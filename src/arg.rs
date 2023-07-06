@@ -1,4 +1,4 @@
-use clap::{Parser};
+use clap::Parser;
 #[path = "./permission.rs"]
 mod permission;
 
@@ -13,29 +13,31 @@ struct Args {
     octal: Option<u8>,
 }
 
-
 pub fn parse_args() {
     let args = Args::parse();
 
-     let from_str: Option<String> = args.dac;
+    let from_str: Option<String> = args.dac;
 
-     match from_str {
-        Some(value) => {
-            match value.len() {
-                3 => println!("{:?}", permission::single_dac_to_octal(value)),
-                11 => {
-                    for permission in permission::full_dac_to_octal(value) {
-                        print!("{}", permission);
-                    }
-                    println!("");
-                },
-                _ => {
-                    eprintln!("Format not supported");
-                    return
+    match from_str {
+        Some(value) => match value.len() {
+            3 => println!("{:?}", permission::single_dac_to_octal(value)),
+            11 => {
+                for permission in permission::full_dac_to_octal(value) {
+                    print!("{}", permission);
                 }
-
+                println!("");
+            }
+            9 => {
+                for permission in permission::full_dac_to_octal(value) {
+                    print!("{}", permission);
+                }
+                println!("");
+            }
+            _ => {
+                eprintln!("Format not supported");
+                return;
             }
         },
-        None => return
-     }
+        None => return,
+    }
 }
