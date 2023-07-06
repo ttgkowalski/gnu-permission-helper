@@ -21,8 +21,20 @@ pub fn parse_args() {
 
      match from_str {
         Some(value) => {
-            permission::dac_to_octal(value);
-            return
+            match value.len() {
+                3 => println!("{:?}", permission::single_dac_to_octal(value)),
+                11 => {
+                    for permission in permission::full_dac_to_octal(value) {
+                        print!("{}", permission);
+                    }
+                    println!("");
+                },
+                _ => {
+                    eprintln!("Format not supported");
+                    return
+                }
+
+            }
         },
         None => return
      }
